@@ -1,0 +1,57 @@
+# Template for ASAP 2.0 or another independently licensed essay corpus.
+# Do not reuse ASAP's prompt scoring ranges unless justified by PUBLISHED rubrics.
+model:
+  backbone: microsoft/deberta-v3-base
+  max_tokens: 384
+  overlap: 64
+  max_segments: 6
+  truncation: first
+  hidden_size: 256
+  dropout: 0.20
+  num_anchors: 5
+  sigma: 0.15
+  anchor_strategy: uniform
+  anchors: null
+  gpaa: true
+  ocaa: true
+  ospl: true
+  conditioning: ordinal
+  anchor_mass_normalize: false
+training:
+  seed: 42
+  seeds: [42, 43, 44, 45, 46]
+  batch_size: 8
+  accumulation_steps: 4
+  epochs: 20
+  lr_backbone: 0.00002
+  lr_new: 0.0001
+  weight_decay: 0.01
+  warmup_ratio: 0.10
+  grad_clip: 1.0
+  alpha: 0.20
+  beta: 0.20
+  gamma: 0.10
+  ordinal_distance_weight: 1.0
+  ordinal_margin: 0.5
+  huber_delta: 1.0
+  pair_mode: balanced
+  max_pairs: 128
+  min_delta_score: 0.000001
+  ties_in_distance: true
+  num_workers: 0
+  amp: true
+  hyperparam_grid:
+    - {alpha: 0.20, beta: 0.20, gamma: 0.10}
+  checkpoint_strategy: median_best_epoch
+  rounding: half_away_from_zero
+  score_transform: minmax
+  inner_max_folds: null
+  eval_batch_size: 8
+data:
+  text_col: essay
+  id_col: essay_id
+  prompt_col: prompt_id
+  score_col: score
+  genre_col: genre
+  sep: ','
+  score_specs: {} # REQUIRED: insert each prompt's PUBLISHED min,max,step before use

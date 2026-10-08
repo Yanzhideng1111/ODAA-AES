@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "odaa-aes-reconstruction"
+version = "0.1.0"
+description = "Independent reconstruction of ODAA-AES for source-only cross-prompt essay scoring"
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.1,<3",
+    "transformers>=4.40,<5",
+    "sentencepiece>=0.1.99",
+    "protobuf>=4.23",
+    "scikit-learn>=1.3",
+    "pandas>=2.0",
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "PyYAML>=6.0"
+]
+
+[tool.setuptools.packages.find]
+include = ["odaa_aes*"]
+
+[project.scripts]
+odaa-aes = "odaa_aes.cli:main"

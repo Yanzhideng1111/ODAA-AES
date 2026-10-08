@@ -1,0 +1,69 @@
+# Paper-matched settings from ODAA-AES revised manuscript, Table 3.
+# Values under ASSUMPTIONS are implementation choices not uniquely specified by the paper.
+model:
+  backbone: microsoft/deberta-v3-base
+  max_tokens: 384
+  overlap: 64
+  max_segments: 6
+  truncation: first  # ASSUMPTION; also supports head_tail
+  hidden_size: 256
+  dropout: 0.20
+  num_anchors: 5
+  sigma: 0.15
+  anchor_strategy: uniform # uniform | quantile | fixed_nonuniform | density_adaptive
+  anchors: null
+  gpaa: true
+  ocaa: true
+  ospl: true
+  conditioning: ordinal # ordinal | hard | shuffled | nonordinal_soft
+  anchor_mass_normalize: false
+training:
+  seed: 42 # ASSUMPTION: paper does not state exact five seed integers
+  seeds: [42, 43, 44, 45, 46]
+  batch_size: 8
+  accumulation_steps: 4
+  epochs: 20
+  lr_backbone: 0.00002
+  lr_new: 0.0001
+  weight_decay: 0.01
+  warmup_ratio: 0.10
+  grad_clip: 1.0
+  # ASSUMPTIONS: original numeric loss coefficients not identified in manuscript.
+  alpha: 0.20
+  beta: 0.20
+  gamma: 0.10
+  ordinal_distance_weight: 1.0
+  ordinal_margin: 0.5
+  huber_delta: 1.0
+  pair_mode: balanced # balanced | all
+  max_pairs: 128
+  min_delta_score: 0.000001
+  ties_in_distance: true
+  num_workers: 0
+  amp: true
+  progress_log_every: 20
+  hyperparam_grid: # SOURCE-ONLY search; default one feasible candidate, expand before claiming full optimization
+    - {alpha: 0.20, beta: 0.20, gamma: 0.10}
+  checkpoint_strategy: median_best_epoch
+  rounding: half_away_from_zero
+  score_transform: minmax # minmax | source_percentile | source_zscore | source_piecewise
+  inner_max_folds: null # null = every inner source prompt, no target prompt
+  eval_batch_size: 8
+# The dataset is never auto-downloaded. Provide licensed local files separately.
+# ASAP prompt definitions use published rubric limits (not observed target labels).
+data:
+  text_col: essay
+  id_col: essay_id
+  prompt_col: essay_set
+  score_col: domain1_score
+  genre_col: null
+  sep: ','
+  score_specs:
+    '1': {min: 2, max: 12, step: 1, genre: argumentative}
+    '2': {min: 1, max: 6, step: 1, genre: argumentative}
+    '3': {min: 0, max: 3, step: 1, genre: source_dependent}
+    '4': {min: 0, max: 3, step: 1, genre: source_dependent}
+    '5': {min: 0, max: 4, step: 1, genre: source_dependent}
+    '6': {min: 0, max: 4, step: 1, genre: source_dependent}
+    '7': {min: 0, max: 30, step: 1, genre: narrative}
+    '8': {min: 0, max: 60, step: 1, genre: narrative}

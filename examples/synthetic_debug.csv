@@ -1,0 +1,7 @@
+essay_id,essay_set,essay,domain1_score
+DEBUG_001,1,"This is a synthetic essay for debugging the program only.",5
+DEBUG_002,1,"A second synthetic essay tests the source text processing.",9
+DEBUG_003,2,"This sample is not a real student essay for scientific evaluation.",4
+DEBUG_004,2,"A tiny dummy example for debugging the training pipeline.",2
+DEBUG_005,3,"Text created solely for testing the source only pipeline.",2
+DEBUG_006,3,"Synthetic words for verifying a scoring evaluation function.",1
